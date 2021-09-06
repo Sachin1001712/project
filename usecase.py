@@ -218,7 +218,9 @@ def analysis_8_result(units_df, spark,output_folder_path):
         .filter((col("RANK")) <= 5)\
         .drop("COUNT")
 
-    print("Analysis 7:\nTop 5 Vehicle Makes where drivers are charged with speeding related offences, has licensed Drivers, "+
+    result2 = primary_person_df.select("CRASH_ID",)
+
+    print("Analysis 8:\nTop 5 Vehicle Makes where drivers are charged with speeding related offences, has licensed Drivers, "+
           "uses top 10 used vehicle colours and has car licensed with the Top 25 states with highest number of offences : ")
     result_df.show()
     write_df_to_csv(result_df,output_folder_path+"analysis_8_result")
@@ -233,7 +235,7 @@ if __name__ == "__main__":
         input_folder_path = sys.argv[1].rstrip("/")+"/"
         output_folder_path = sys.argv[2].rstrip("/")+"/"
     else:
-        msg = "Usage-using spark submit: spark-submit --master local/yarn [--deploy_mode client/cluster] <python_file_path> <input_folder_path> <output_folder_path>" \
+        msg = "\nUsage-using spark submit: spark-submit --master local/yarn [--deploy_mode client/cluster] <python_file_path> <input_folder_path> <output_folder_path>" \
               "\nor\n" \
               "Usage - python <python_file_path> <input_folder_path> <output_folder_path>" \
               "Ex: python /Users/sachin/PycharmProjects/Codes/usecase.py /Users/sachin/PycharmProjects/Codes/input /Users/sachin/PycharmProjects/Codes/output"
@@ -263,3 +265,6 @@ if __name__ == "__main__":
     analysis_7_result(units_df, damages_df,output_folder_path)
     analysis_8_result(units_df, spark,output_folder_path)
 
+    units_df.unpersist()
+    primary_person_df.unpersist()
+    spark.stop()
